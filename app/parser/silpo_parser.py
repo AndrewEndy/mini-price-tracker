@@ -46,6 +46,13 @@ class SilpoParser(BaseParser):
             return None
 
 
+async def get_parse_silpo(url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
+    async with aiohttp.ClientSession() as session:
+        parser = SilpoParser(session)
+        res = await parser.parse(url, tg_id)
+        return res
+
+
 async def run_parsers(urls: List[str]) -> None:
     """Тест роботи парсира"""
     async with aiohttp.ClientSession() as session:
