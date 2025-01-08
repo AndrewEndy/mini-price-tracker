@@ -12,7 +12,7 @@ from app.bot.create_bot import admins, bot
 from app.bot.keyboards.reply_keyboard import main_rp_kb
 from app.bot.keyboards.inline_keyboard import back_home_and_show_my_products_inline_kb, show_all_my_products_inl_kb, product_control_inline_kb
 from app.bot.fsm.form_fsm import Change_name_form
-from app.services import parser_allocator
+from app.services import update_product_data
 from app.utils.creating_text_about_user_products import get_update_data_text
 from app.utils.work_with_database import delete_product_by_id
 
@@ -49,7 +49,7 @@ async def update_product_data(data: CallbackQuery):
         max_price_obj = max(product.prices, key=lambda price: price.price)
         min_price_obj = min(product.prices, key=lambda price: price.price)
         
-        res = await parser_allocator({product.store_name: [(product.url, data.from_user.id),]})
+        res = await update_product_data({product.store_name: [(product.url, data.from_user.id),]})
         res = res[0]
         
         if res:

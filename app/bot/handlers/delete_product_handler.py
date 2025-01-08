@@ -11,7 +11,7 @@ from app.models import Product, Price, User
 from app.bot.create_bot import admins, bot
 from app.bot.keyboards.reply_keyboard import main_rp_kb
 from app.bot.keyboards.inline_keyboard import back_home_and_show_my_products_inline_kb, show_all_my_products_inl_kb, product_control_inline_kb
-from app.services import parser_allocator
+from app.services import update_product_data
 from app.utils.creating_text_about_user_products import get_update_data_text
 from app.utils.work_with_database import delete_product_by_id
 
