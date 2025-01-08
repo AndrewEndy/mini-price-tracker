@@ -65,6 +65,13 @@ class WillmaxParser(BaseParser):
             return None
 
 
+async def get_parse_willmax(url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
+    async with aiohttp.ClientSession() as session:
+        parser = WillmaxParser(session)
+        res = await parser.parse(url, tg_id)
+        return res
+
+
 async def run_parsers(urls: List[str]) -> None:
     """Тест роботи парсира"""
     async with aiohttp.ClientSession() as session:
