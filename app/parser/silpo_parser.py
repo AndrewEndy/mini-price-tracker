@@ -32,8 +32,8 @@ class SilpoParser(BaseParser):
             # print('--->' , discount , '<---')
             
             
-            price = Price(price=float(price), currency=currency, discount=discount, unit_of_measure=unit_of_measure)
-            product = Product(product_name=product_name, store_name='Сільпо', url=url, tg_id = tg_id)
+            price_obj = Price(price=float(price), currency=currency, discount=discount, unit_of_measure=unit_of_measure)
+            product_obj = Product(product_name=product_name, store_name='Сільпо', url=url, tg_id = tg_id)
             
             # print(product.prices[0])
             
@@ -41,7 +41,7 @@ class SilpoParser(BaseParser):
             #     session.add(product)
             #     await session.commit()
                 
-            return product, price
+            return product_obj, price_obj
         else:
             return None
 
