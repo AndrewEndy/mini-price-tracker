@@ -9,14 +9,15 @@ from app.bot.create_bot import bot
 from app.db import SessionLocal
 
 
-async def add_new_product(url: str, store_name: str, tg_id: int) -> int:
+async def add_new_product(url: str, store_name: str, tg_id: int) -> Tuple['int', 'str']:
     
-    if store_name == 'silpo':
-        product, price = await get_parse_silpo(url, tg_id)
-        # product, price = product_and_price
-        product.prices.append(price)
-        await add_new_product_to_db(product)
-        return product.product_id, product.product_name
+    if store_name == 'willmax': product, price = await get_parse_willmax(url, tg_id)
+    if store_name == 'silpo': product, price = await get_parse_silpo(url, tg_id)
+
+    print(product, price)
+    product.prices.append(price)
+    await add_new_product_to_db(product)
+    return product.product_id, product.product_name
         
 
 
@@ -26,7 +27,7 @@ async def get_updated_product_data(data_for_parsing : dict) -> Tuple['Product','
         url, tg_id = urls_with_tg_id
         
         if store == 'Rozetka': pass
-        if store == 'Willmax': res = await get_parse_willmax.parse(url, tg_id)
+        if store == 'Willmax': res = await get_parse_willmax(url, tg_id)
         if store == 'Сільпо': res = await get_parse_silpo(url, tg_id)
             
     return res    
