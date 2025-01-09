@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 from app.config import headers
 from app.checks.check_silpo import is_url_for_product_silpo, is_url_for_silpo
+from app.checks.check_willmax import is_url_for_product_willmax, is_url_for_willmax
 
 
 
@@ -24,6 +25,12 @@ async def check_desired_site(url: str, store_name: str) -> bool:
     
     if store_name == 'rozetka':
         pass
+    
+    
+    if store_name == 'willmax':
+        if not is_url_for_willmax(url): return False
+        flag = await is_url_for_product_willmax(url)
+    
     
     if store_name == 'silpo':
         if not is_url_for_silpo(url): return False
