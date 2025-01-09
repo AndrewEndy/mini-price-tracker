@@ -56,7 +56,8 @@ async def update_product_data(data: CallbackQuery):
             _, new_price = res
         
             if (new_price.price != last_price_obj.price or new_price.price < min_price_obj.price 
-                or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount):
+                or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount
+                or new_price.status != last_price_obj.status):
                 
                 await data.message.answer(f'Виявлено нові дані🧐') 
                 await asyncio.sleep(2)

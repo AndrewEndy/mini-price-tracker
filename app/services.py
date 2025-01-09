@@ -51,7 +51,8 @@ async def check_products_updates():
                 _, new_price = res
             
                 if (new_price.price != last_price_obj.price or new_price.price < min_price_obj.price 
-                    or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount):
+                    or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount
+                    or new_price.status != last_price_obj.status):
                     
                     text = 'Дані про товар змінились‼️‼️\n'
                     
