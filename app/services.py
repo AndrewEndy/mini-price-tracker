@@ -36,6 +36,8 @@ async def check_products_updates():
 
         products = await get_all_products()
 
+        print('\n<<< check_products_updates >>>\n')
+        
         for product in products:
             
             last_price_obj = max(product.prices, key=lambda price: price.date)
