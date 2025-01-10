@@ -53,16 +53,23 @@ class WillmaxParser(BaseParser):
             
             # print('--->' + unit_of_measure + '<---') 
             
-            price_data = Price(price=float(price), currency=currency, discount=discount)
-            product = Product(product_name=product_name, store_name='Willmax', url=url, tg_id = tg_id)
+            price_obj = Price(price=float(price), currency=currency, discount=discount)
+            product_obj = Product(product_name=product_name, store_name='Willmax', url=url, tg_id = tg_id)
             
             # async with SessionLocal() as session:
             #     session.add(product)
             #     await session.commit()
             
-            return product, price
+            return product_obj, price_obj
         else:
             return None
+
+
+async def get_parse_willmax(url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
+    async with aiohttp.ClientSession() as session:
+        parser = WillmaxParser(session)
+        res = await parser.parse(url, tg_id)
+        return res
 
 
 async def run_parsers(urls: List[str]) -> None:

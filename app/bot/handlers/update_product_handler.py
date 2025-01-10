@@ -12,7 +12,7 @@ from app.bot.create_bot import admins, bot
 from app.bot.keyboards.reply_keyboard import main_rp_kb
 from app.bot.keyboards.inline_keyboard import back_home_and_show_my_products_inline_kb, show_all_my_products_inl_kb, product_control_inline_kb
 from app.bot.fsm.form_fsm import Change_name_form
-from app.services import parser_allocator
+from app.services import get_updated_product_data
 from app.utils.creating_text_about_user_products import get_update_data_text
 from app.utils.work_with_database import delete_product_by_id
 
@@ -49,15 +49,15 @@ async def update_product_data(data: CallbackQuery):
         max_price_obj = max(product.prices, key=lambda price: price.price)
         min_price_obj = min(product.prices, key=lambda price: price.price)
         
-        res = await parser_allocator({product.store_name: [(product.url, data.from_user.id),]})
-        res = res[0]
-        
+        res = await get_updated_product_data({product.store_name: (product.url, data.from_user.id)})
+    
         if res:
             
             _, new_price = res
         
             if (new_price.price != last_price_obj.price or new_price.price < min_price_obj.price 
-                or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount):
+                or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount
+                or new_price.status != last_price_obj.status):
                 
                 await data.message.answer(f'Виявлено нові дані🧐') 
                 await asyncio.sleep(2)

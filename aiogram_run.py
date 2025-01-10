@@ -1,6 +1,8 @@
 import asyncio
 from aiogram.types import BotCommand, BotCommandScopeDefault
+from apscheduler.triggers.interval import IntervalTrigger
 from app.bot.create_bot import bot, dp, scheduler, admins
+from app.services import check_products_updates
 
 #from work_time.send_message import send_message_time
 from datetime import datetime, timedelta
@@ -30,6 +32,7 @@ async def start_bot():
             await bot.send_message(admin_id, f'Я запущений🥳')
     except:
         pass
+    await check_products_updates()
 
 # Функция, которая выполнится когда бот завершит свою работу
 async def stop_bot():
@@ -42,8 +45,19 @@ async def stop_bot():
 
 
 async def main():
-    # scheduler.add_job(send_message_time, 'interval', seconds=7200, next_run_time=datetime.now(), args=(bot,))
-    # scheduler.start()
+    scheduler.add_job(
+        check_products_updates,  # Ваша функція
+        IntervalTrigger(hours=12),  # Триггер для виконання кожні 12 годин
+        name="Check prices every 12 hours",
+    )
+
+#     scheduler.add_job(
+#         check_products_updates,  # Ваша функція
+#         IntervalTrigger(minutes=1),  # Триггер для тесту (кожну хвилину)
+#         name="Check prices every minute (test)",
+#     )
+
+    scheduler.start()
     
     dp.include_router(user_router)
     dp.include_router(view_router)

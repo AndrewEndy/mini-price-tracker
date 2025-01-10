@@ -63,3 +63,11 @@ async def add_new_product_to_db(product: Product) -> None:
         async with session.begin():  # Початок транзакції
             session.add(product)
     
+
+async def get_all_products() -> list['Product']:
+    async with SessionLocal() as session:
+        async with session.begin():
+            query = select(Product).options(joinedload(Product.prices))
+            result = await session.execute(query)
+            products = result.unique().scalars().all()
+    return products

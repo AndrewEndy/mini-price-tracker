@@ -36,6 +36,7 @@ class Price(Base):
     currency: Mapped[str] = mapped_column(String(10), nullable=True) # Валюта
     discount: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False) # Знижка
     unit_of_measure: Mapped[str] = mapped_column(String(100), default='шт.', nullable=True) # Одиниця виміру
+    status: Mapped[str] = mapped_column(String(100), default=None, nullable=True)
     date: Mapped[datetime.datetime] = mapped_column(DateTime, default=datetime.datetime.now, nullable=False)
 
     # Establishing a relationship with the Products table
