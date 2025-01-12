@@ -18,14 +18,14 @@ class WillmaxParser(BaseParser):
         if html_content:
             soup = BeautifulSoup(html_content, 'html.parser')
             
-            price = 0
             discount = False
-            currency = ''
+            
             product_name = soup.find('div', class_='title-product').text.strip()
             
             price_block = soup.find('div', class_='product_page_price price')
             
-            if(price_block.find('span', id = 'price-special')): # Отримання даних якщо товар акційний
+            # Отримання даних якщо товар акційний
+            if(price_block.find('span', id = 'price-special')): 
                 discount = True
                 price_with_currency = price_block.find('span', id = 'price-special').text.strip().split(' ') 
                 
@@ -46,15 +46,16 @@ class WillmaxParser(BaseParser):
                 
                 currency = price_with_currency[-1][:-1]
                     
+                    
+                    
             # print('--->' + product_name + '<---')
             # print('--->' + str(price) + '<---')
             # print('--->' + currency + '<---')
             # print('--->' , discount , '<---')
             
-            # print('--->' + unit_of_measure + '<---') 
             
-            price_obj = Price(price=float(price), currency=currency, discount=discount)
-            product_obj = Product(product_name=product_name, store_name='Willmax', url=url, tg_id = tg_id)
+            price_obj = Price(price=price, currency=currency, discount=discount, status=None, unit_of_measure=None)
+            product_obj = Product(product_name=product_name, store_name='Willmax', url=url, tg_id=tg_id)
             
             # async with SessionLocal() as session:
             #     session.add(product)
@@ -76,7 +77,8 @@ async def run_parsers(urls: List[str]) -> None:
     """Тест роботи парсира"""
     async with aiohttp.ClientSession() as session:
         parser = WillmaxParser(session)
-        await parser.parse(urls, tg_id=123)
+        res = await parser.parse(urls, tg_id=123)
+        print(res)
 
 if __name__ == "__main__":
     asyncio.run(run_parsers("https://www.willmax.com.ua/mass-gainer-2kg-shokolad"))
