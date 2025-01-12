@@ -21,18 +21,34 @@ class SilpoParser(BaseParser):
             price_block = soup.find('div', class_='ft-flex ft-justify-between ft-items-center ft-mb-16 md:ft-mb-24')
             price_with_currency = price_block.find('div', class_='product-page-price__main').text.strip()
             
-            price = price_with_currency.split(' ')[0]
+            # Пошук ціни
+            price = float(price_with_currency.split(' ')[0])
+            
+            # Пошук валюти
             currency = price_with_currency.split(' ')[1]
+            
+            # Пошук знижки
             discount = True if price_block.find('div', class_ = 'product-page-price__sale ng-star-inserted') else False
+            
+            # Пошук статуса товара
+            if soup.find('div', class_='quantity').text.strip() == 'У кошик':
+                status = 'Є в наявності'
+            elif soup.find('div', class_='quantity').text.strip() == 'Товар закінчився':
+                status = 'Немає в наявності'
+            else: 
+                status = None
+            
+            
             
             # print('--->' + product_name + '<---')
             # print('--->' + unit_of_measure + '<---')
-            # print('--->' + price + '<---')
+            # print('--->' , price , '<---')
             # print('--->' + currency + '<---')
+            # print('--->' + status + '<---')
             # print('--->' , discount , '<---')
             
             
-            price_obj = Price(price=float(price), currency=currency, discount=discount, unit_of_measure=unit_of_measure)
+            price_obj = Price(price=price, currency=currency, discount=discount, unit_of_measure=unit_of_measure, status=status)
             product_obj = Product(product_name=product_name, store_name='Сільпо', url=url, tg_id = tg_id)
             
             # print(product.prices[0])
@@ -62,6 +78,6 @@ async def run_parsers(urls: List[str]) -> None:
         
 
 if __name__ == "__main__":
-    asyncio.run(run_parsers("https://silpo.ua/product/svyniacha-rulka-mr-grill-cheska-zamorozhena-889932"))
+    asyncio.run(run_parsers("https://silpo.ua/product/pechyvo-oreo-original-z-kakao-ta-nachynkoiu-z-vanilnym-smakom-685646"))
     # asyncio.run(run_parsers("https://123"))
     
