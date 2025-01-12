@@ -5,6 +5,7 @@ from app.checks.check_silpo import is_url_for_product_silpo, is_url_for_silpo
 from app.checks.check_willmax import is_url_for_product_willmax, is_url_for_willmax
 from app.checks.check_rozetka import is_url_for_product_rozetka, is_url_for_rozetka
 from app.checks.check_avrora import is_url_for_product_avrora, is_url_for_avrora
+from app.checks.check_epicentr import is_url_for_product_epicentr, is_url_for_epicentr
 
 
 
@@ -43,5 +44,11 @@ async def check_desired_site(url: str, store_name: str) -> bool:
     if store_name == 'silpo':
         if not is_url_for_silpo(url): return False
         flag = await is_url_for_product_silpo(url)
+        
+        
+    if store_name == 'epicentr':
+        if not is_url_for_epicentr(url): return False
+        flag = await is_url_for_product_epicentr(url)
+    
     
     return flag
