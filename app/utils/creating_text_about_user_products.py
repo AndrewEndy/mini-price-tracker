@@ -36,9 +36,10 @@ async def get_update_data_text(product: Product, last_price_obj: Price, min_pric
     
     text = f'''\n🛒<b>Магазин:</b> {product.store_name}\n📝<b>Назва товара:</b> {product.product_name}\n'''
     unit_of_measure = None if not new_price_obj.unit_of_measure or new_price_obj.unit_of_measure == 'шт.' else new_price_obj.unit_of_measure
-    status = new_price_obj.status
+    new_status = new_price_obj.status
+    old_status = last_price_obj.status
     
-    if unit_of_measure: text += f'<b>Об\'єм:</b> {unit_of_measure}\n'
+    if unit_of_measure: text += f'<b>Ціна за:</b> {unit_of_measure}\n'
     
     if last_price_obj.price != new_price_obj.price:
         text += f'''💸<b>Остання ціна:</b> <s>{last_price_obj.price} {currency}</s> ➡️ {new_price_obj.price} {currency}\n'''
@@ -58,8 +59,10 @@ async def get_update_data_text(product: Product, last_price_obj: Price, min_pric
     else:
         text+=f'\n📈<b>Максимальна ціна:</b> {max_price_obj.price} {currency}\n🗓️<b>Остання дата змін:</b> {str(max_price_obj.date.date())}\n'
         
-    if status:
-        text += f'\n<b>📍Статус: </b>{status}\n'
+    if new_status and old_status and new_status != old_status:
+        text += f'\n<b>📍Статус: </b><s>{old_status}</s> ➡️ {new_status}\n'
+    elif new_status and not old_status:
+        text += f'\n<b>📍Статус: </b>{new_status}\n'
         
     if new_price_obj.discount:
         text+=f'\n‼️<b>На товар діє знижка</b>‼️\n'
@@ -91,7 +94,7 @@ async def get_info_product(product: Product) -> str:
     
     text = f'''\n🛒<b>Магазин:</b> {product.store_name}\n📝<b>Назва товара:</b> {product.product_name}\n'''
     
-    if unit_of_measure: text += f'<b>Об\'єм:</b> {unit_of_measure}\n'
+    if unit_of_measure: text += f'<b>Ціна за:</b> {unit_of_measure}\n'
     
     text += f'''\n💸<b>Остання ціна:</b> {last_price} {currency}\n🗓️<b>Остання дата змін:</b> {str(last_date.date())}\n'''
     
