@@ -33,7 +33,7 @@ async def get_updated_product_data(data_for_parsing : dict) -> Tuple['Product','
         if store == 'Rozetka': res = await get_parse_rozetka(url, tg_id)
         if store == 'Willmax': res = await get_parse_willmax(url, tg_id)
         if store == 'Сільпо': res = await get_parse_silpo(url, tg_id)
-        if store == 'Аврора': product, price = await get_parse_avrora(url, tg_id)
+        if store == 'Аврора': res = await get_parse_avrora(url, tg_id)
             
     return res    
     

@@ -29,8 +29,10 @@ class AvroraParser(BaseParser):
             price = float(''.join(price_with_currency.split()[:-1]))
             
             # Пошук статуса товара
-            if soup.find('span', class_='ty-control-group__item'):
-                status = soup.find('span', class_='ty-control-group__item').text.strip()
+            if soup.find('span', class_='ty-control-group__item').text.strip() == 'Немає в наявності':
+                status = 'Немає в наявності'
+            elif soup.find('span', class_='ty-control-group__item').text.strip() == 'Відправимо завтра':
+                status = 'Є в наявності'
             else:
                 status = None
             
