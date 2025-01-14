@@ -6,6 +6,7 @@ from app.parser.rozetka_parser import get_parse_rozetka
 from app.parser.avrora_parser import get_parse_avrora
 from app.parser.epicentr_parser import get_parse_epicentr
 from app.parser.yabko_parser import get_parse_yabko
+from app.parser.staff_parser import get_parse_staff
 from app.models import Price, Product, User
 from app.utils.work_with_database import add_new_product_to_db, get_all_products, delete_product_by_id
 from app.utils.creating_text_about_user_products import get_update_data_text
@@ -21,6 +22,7 @@ async def add_new_product(url: str, store_name: str, tg_id: int) -> Tuple['int',
     if store_name == 'avrora': product, price = await get_parse_avrora(url, tg_id)
     if store_name == 'epicentr': product, price = await get_parse_epicentr(url, tg_id)
     if store_name == 'yabko': product, price = await get_parse_yabko(url, tg_id)
+    if store_name == 'staff': product, price = await get_parse_staff(url, tg_id)
     
     # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
     if price.price == 0.0 and price.discount == False and price.currency == None and price.unit_of_measure == None: return 0, ''
@@ -43,6 +45,7 @@ async def get_updated_product_data(data_for_parsing : dict) -> Tuple['Product','
         if store == 'Аврора': res = await get_parse_avrora(url, tg_id)
         if store == 'Епіцентр': res = await get_parse_epicentr(url, tg_id)
         if store == 'Ябко': res = await get_parse_yabko(url, tg_id)
+        if store == 'Staff': res = await get_parse_staff(url, tg_id)
             
     return res    
     
@@ -81,7 +84,7 @@ async def check_products_updates():
                     or new_price.status != last_price_obj.status):
                     
                     text = 'Дані про товар змінились‼️‼️\n'
-                    print(f'---- Виявлено зміни: {last_price_obj.product.product_name} ----')
+                    print(f'---- Виявлено зміни: {product.product_name} ----')
                     
                     new_price.product = product
                     async with SessionLocal() as session:
