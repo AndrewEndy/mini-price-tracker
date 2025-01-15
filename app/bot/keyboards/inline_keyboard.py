@@ -29,7 +29,7 @@ def check_name_product_inline_kb(product_id: int) -> InlineKeyboardMarkup:
                                 )
 
 
-def show_all_my_products_inl_kb(products: List['Product']) -> InlineKeyboardBuilder:
+def show_all_my_products_inl_kb(products: List['Product'], next_page=False, back_page=False) -> InlineKeyboardBuilder:
     '''Стоворення Inline клавіатури з усіма товарами користувача'''
     
     builder = InlineKeyboardBuilder()
@@ -45,7 +45,7 @@ def show_all_my_products_inl_kb(products: List['Product']) -> InlineKeyboardBuil
     # Додаєм кнопку "Переглянути всі" 
     builder.row(
         InlineKeyboardButton(
-            text='Переглянути всі',
+            text='--- Переглянути всі ---',
             callback_data='show_all_products'
         )
     )
@@ -53,10 +53,30 @@ def show_all_my_products_inl_kb(products: List['Product']) -> InlineKeyboardBuil
     # Додаєм кнопку "На головну"
     builder.row(
         InlineKeyboardButton(
-            text='Назад',
+            text='--- На головну ---',
             callback_data='back_home'
         )
     )
+    
+    
+    # Додаєм кнопку "Наступна сторінка"
+    if next_page:
+        builder.row(
+            InlineKeyboardButton(
+                text='Наступна сторінка >>',
+                callback_data='next_page'
+            )
+        )
+        
+        
+    # Додаєм кнопку "Попередня сторінка"
+    if back_page:
+        builder.row(
+            InlineKeyboardButton(
+                text='<< Попередня сторінка',
+                callback_data='back_page'
+            )
+        )
     
     # Налаштовуєм розмір клавіатури
     builder.adjust(1)
