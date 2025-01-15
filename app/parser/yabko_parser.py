@@ -9,67 +9,78 @@ from app.db import SessionLocal
 
 
 class YabkoParser(BaseParser):
-    async def parse(self, url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
-        html_content = await self.fetch_page(url)
+    async def parse(self, html_content , url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
+        soup = BeautifulSoup(html_content, 'html.parser')
         
-        if html_content:
-            soup = BeautifulSoup(html_content, 'html.parser')
+        product_name = soup.find('h1', class_='product-info__title').text.strip()
+        
+        # Пошук статуса
+        if soup.find('div', class_='product-info-product_status'):
+            status = soup.find('div', class_='product-info-product_status').text.strip()
             
-            product_name = soup.find('h1', class_='product-info__title').text.strip()
-            
-            # Пошук статуса
-            if soup.find('div', class_='product-info-product_status'):
-                status = soup.find('div', class_='product-info-product_status').text.strip()
-                
-                if status == 'В наличии': status = 'В наявності'
-                if status == 'Осталось мало': status = 'Залишилось мало'
-                if status == 'Предзаказ': status = 'Передзамовлення'
-            else:
-                status = None
-                
-                
-            # Блок даних з ціною, знижкою, валютою
-            price_block = soup.find('div', class_='product-prices')
-            
-            discount = True if price_block.find('div', class_='product-info__price-old') else False
-            currency = price_block.find('div', class_='product-info__price-new').text.strip().split()[-1]
-            price = float(''.join(price_block.find('div', class_='product-info__price-new').text.strip().split()[:-1]))
-            
-
-            # print('--->' + product_name + '<---')
-            # print('--->' + status + '<---')
-            # print('--->' , discount , '<---')
-            # print('--->' + currency + '<---')
-            # print('--->' , price , '<---')
-            
-            
-            price_obj = Price(price=price, currency=currency, discount=discount, status=status, unit_of_measure='шт.')
-            product_obj = Product(product_name=product_name, store_name='Ябко', url=url, tg_id=tg_id)
-            
-            # print(f'{product_obj}\n\n{price_obj}')
-            
-            # async with SessionLocal() as session:
-            #     session.add(product)
-            #     await session.commit()
-                
-            return product_obj, price_obj
+            if status == 'В наличии': status = 'В наявності'
+            if status == 'Осталось мало': status = 'Залишилось мало'
+            if status == 'Предзаказ': status = 'Передзамовлення'
         else:
-            return None
+            status = None
+            
+            
+        # Блок даних з ціною, знижкою, валютою
+        price_block = soup.find('div', class_='product-prices')
+        
+        discount = True if price_block.find('div', class_='product-info__price-old') else False
+        currency = price_block.find('div', class_='product-info__price-new').text.strip().split()[-1]
+        price = float(''.join(price_block.find('div', class_='product-info__price-new').text.strip().split()[:-1]))
+        
+
+        # print('--->' + product_name + '<---')
+        # print('--->' + status + '<---')
+        # print('--->' , discount , '<---')
+        # print('--->' + currency + '<---')
+        # print('--->' , price , '<---')
+        
+        
+        price_obj = Price(price=price, currency=currency, discount=discount, status=status, unit_of_measure='шт.')
+        product_obj = Product(product_name=product_name, store_name='Ябко', url=url, tg_id=tg_id)
+        
+        # print(f'{product_obj}\n\n{price_obj}')
+        
+        # async with SessionLocal() as session:
+        #     session.add(product)
+        #     await session.commit()
+            
+        return product_obj, price_obj
 
 
 async def get_parse_yabko(url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
     async with aiohttp.ClientSession() as session:
         parser = YabkoParser(session)
-        res = await parser.parse(url, tg_id)
-        return res
+        html_content = await parser.fetch_page(url)
+        
+        if html_content:
+            res = await parser.parse(html_content, url, tg_id)
+            return res
+        else: 
+            return None
 
 
-async def run_parsers(urls: List[str]) -> None:
+async def get_parsed_changes_yabko(html_content, url: str, tg_id: int) -> Tuple['Product', 'Price']:
+    async with aiohttp.ClientSession() as session:
+        parser = YabkoParser(session)
+        return await parser.parse(html_content, url, tg_id)
+
+
+async def run_parsers(url: List[str]) -> None:
     """Тест роботи парсира"""
     async with aiohttp.ClientSession() as session:
         parser = YabkoParser(session)
-        res = await parser.parse(urls, tg_id=123)
-        print(res)
+        html_content = await parser.fetch_page(url)
+        
+        if html_content:
+            res = await parser.parse(html_content, url, tg_id=123)
+            print(res)
+        else: 
+            return None
         
 
 if __name__ == "__main__":
