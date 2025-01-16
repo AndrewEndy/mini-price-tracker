@@ -7,6 +7,7 @@ from app.parser.avrora_parser import get_parse_avrora, get_parsed_changes_avrora
 from app.parser.epicentr_parser import get_parse_epicentr, get_parsed_changes_epicentr
 from app.parser.yabko_parser import get_parse_yabko, get_parsed_changes_yabko
 from app.parser.staff_parser import get_parse_staff, get_parsed_changes_staff
+from app.parser.shchodnya_parser import get_parse_shchodnya, get_parsed_changes_shchodnya
 from app.models import Price, Product, User
 from app.utils.work_with_database import add_new_product_to_db, get_all_products, delete_product_by_id, get_all_urls
 from app.utils.work_with_aiohttp import get_gather
@@ -24,6 +25,7 @@ async def add_new_product(url: str, store_name: str, tg_id: int) -> Tuple['int',
     if store_name == 'epicentr': product, price = await get_parse_epicentr(url, tg_id)
     if store_name == 'yabko': product, price = await get_parse_yabko(url, tg_id)
     if store_name == 'staff': product, price = await get_parse_staff(url, tg_id)
+    if store_name == 'shchodnya': product, price = await get_parse_shchodnya(url, tg_id)
     
     # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
     if price.price == 0.0 and price.discount == False and price.currency == None and price.unit_of_measure == None: return 0, ''
@@ -47,6 +49,7 @@ async def get_updated_product_data(data_for_parsing : dict) -> Tuple['Product','
         if store == 'Епіцентр': res = await get_parse_epicentr(url, tg_id)
         if store == 'Ябко': res = await get_parse_yabko(url, tg_id)
         if store == 'Staff': res = await get_parse_staff(url, tg_id)
+        if store == 'Щодня': res = await get_parse_shchodnya(url, tg_id)
             
     return res    
 
@@ -64,6 +67,7 @@ async def get_update_product_data_with_content(data_for_parsing: dict) -> Tuple[
         if store == 'Епіцентр': res = await get_parsed_changes_epicentr(html_content, url, tg_id)
         if store == 'Ябко': res = await get_parsed_changes_yabko(html_content, url, tg_id)
         if store == 'Staff': res = await get_parsed_changes_staff(html_content, url, tg_id)
+        if store == 'Щодня': res = await get_parsed_changes_shchodnya(html_content, url, tg_id)
             
     return res   
     
@@ -98,7 +102,7 @@ async def check_products_updates():
                         # _, new_price = res
                         
                         
-                        # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
+                        # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нього
                         if new_price.price == 0.0 and new_price.discount == False and new_price.currency == None and new_price.unit_of_measure == None:
                             new_price.price = last_price_obj.price
                             new_price.currency = last_price_obj.currency
