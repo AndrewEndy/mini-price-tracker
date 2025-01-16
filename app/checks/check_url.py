@@ -9,6 +9,7 @@ from app.checks.check_epicentr import is_url_for_product_epicentr, is_url_for_ep
 from app.checks.check_yabko import is_url_for_product_yabko, is_url_for_yabko
 from app.checks.check_staff import is_url_for_product_staff, is_url_for_staff
 from app.checks.check_shchodnya import is_url_for_product_shchodnya, is_url_for_shchodnya
+from app.checks.check_eva import is_url_for_product_eva, is_url_for_eva
 
 
 
@@ -66,7 +67,12 @@ async def check_desired_site(url: str, store_name: str) -> bool:
         
     if store_name == 'shchodnya':
         if not is_url_for_shchodnya(url): return False
-        flag = await is_url_for_product_shchodnya(url)    
+        flag = await is_url_for_product_shchodnya(url) 
+    
+    
+    if store_name == 'eva':
+        if not is_url_for_eva(url): return False
+        flag = await is_url_for_product_eva(url)    
     
     
     return flag
