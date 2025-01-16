@@ -54,6 +54,15 @@ async def update_product_data(data: CallbackQuery):
         if res:
             
             _, new_price = res
+            
+            
+            # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
+            if new_price.price == 0.0 and new_price.discount == False and new_price.currency == None and new_price.unit_of_measure == None:
+                new_price.price = last_price_obj.price
+                new_price.currency = last_price_obj.currency
+                new_price.date = last_price_obj.date
+                new_price.unit_of_measure = last_price_obj.unit_of_measure
+            
         
             if (new_price.price != last_price_obj.price or new_price.price < min_price_obj.price 
                 or new_price.price > max_price_obj.price or new_price.discount != last_price_obj.discount

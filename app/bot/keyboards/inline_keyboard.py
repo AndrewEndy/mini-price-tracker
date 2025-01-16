@@ -8,7 +8,9 @@ def inline_kb_store() -> InlineKeyboardMarkup:
     '''Inline клавіатура з вибором різних інтернет магазинів'''
     inline_kb_list = [
         [InlineKeyboardButton(text='Rozetka', callback_data='store_rozetka'), InlineKeyboardButton(text='Сільпо', callback_data='store_silpo')],
-        [InlineKeyboardButton(text='Willmax', callback_data='store_willmax'), InlineKeyboardButton(text='АЛЛО', callback_data='store_allo')],
+        [InlineKeyboardButton(text='Willmax', callback_data='store_willmax'), InlineKeyboardButton(text='Аврора', callback_data='store_avrora')],
+        [InlineKeyboardButton(text='Епіцентр', callback_data='store_epicentr'), InlineKeyboardButton(text='Ябко', callback_data='store_yabko')],
+        [InlineKeyboardButton(text='Staff', callback_data='store_staff') ],
         [InlineKeyboardButton(text='«Назад', callback_data='back_home')]
     ]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
@@ -27,7 +29,7 @@ def check_name_product_inline_kb(product_id: int) -> InlineKeyboardMarkup:
                                 )
 
 
-def show_all_my_products_inl_kb(products: List['Product']) -> InlineKeyboardBuilder:
+def show_all_my_products_inl_kb(products: List['Product'], next_page=False, back_page=False) -> InlineKeyboardBuilder:
     '''Стоворення Inline клавіатури з усіма товарами користувача'''
     
     builder = InlineKeyboardBuilder()
@@ -43,7 +45,7 @@ def show_all_my_products_inl_kb(products: List['Product']) -> InlineKeyboardBuil
     # Додаєм кнопку "Переглянути всі" 
     builder.row(
         InlineKeyboardButton(
-            text='Переглянути всі',
+            text='--- Переглянути всі ---',
             callback_data='show_all_products'
         )
     )
@@ -51,10 +53,30 @@ def show_all_my_products_inl_kb(products: List['Product']) -> InlineKeyboardBuil
     # Додаєм кнопку "На головну"
     builder.row(
         InlineKeyboardButton(
-            text='Назад',
+            text='--- На головну ---',
             callback_data='back_home'
         )
     )
+    
+    
+    # Додаєм кнопку "Наступна сторінка"
+    if next_page:
+        builder.row(
+            InlineKeyboardButton(
+                text='Наступна сторінка >>',
+                callback_data='next_page'
+            )
+        )
+        
+        
+    # Додаєм кнопку "Попередня сторінка"
+    if back_page:
+        builder.row(
+            InlineKeyboardButton(
+                text='<< Попередня сторінка',
+                callback_data='back_page'
+            )
+        )
     
     # Налаштовуєм розмір клавіатури
     builder.adjust(1)

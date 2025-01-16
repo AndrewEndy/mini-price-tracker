@@ -50,8 +50,16 @@ async def add_product(message: Message, state: FSMContext):
                     await state.clear()
                     await message.answer(f'Даний товар вже відстежується', reply_markup=main_rp_kb(message.from_user.id))
                 else:
+                    
                     product_id, product_name = await add_new_product(message.text, store_name, message.from_user.id)
-                    await message.answer(f'Товар успішно додано👏\n<b>Навза товару</b>: {product_name}', reply_markup=check_name_product_inline_kb(product_id))
+                    
+                    # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
+                    if product_id == 0 and product_name == '':
+                        await state.clear()
+                        await message.answer(f'Не вдалось отримати достатньо даних про товар', reply_markup=main_rp_kb(message.from_user.id))
+                        
+                    else:
+                        await message.answer(f'Товар успішно додано👏\n<b>Навза товару</b>: {product_name}', reply_markup=check_name_product_inline_kb(product_id))
             else:
                 await state.clear()
                 await message.answer(f'Ви ввели не вірну силку!', reply_markup=main_rp_kb(message.from_user.id))

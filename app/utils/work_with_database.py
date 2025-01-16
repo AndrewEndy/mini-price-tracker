@@ -71,3 +71,12 @@ async def get_all_products() -> list['Product']:
             result = await session.execute(query)
             products = result.unique().scalars().all()
     return products
+
+
+async def get_all_urls() -> list[str]:
+    async with SessionLocal() as session:
+        async with session.begin():
+            query = select(Product.url)  # Вибираємо лише колонку url
+            result = await session.execute(query)
+            urls = result.scalars().all()  # Отримуємо список URL
+    return urls

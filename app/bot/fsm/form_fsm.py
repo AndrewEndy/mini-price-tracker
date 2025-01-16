@@ -7,3 +7,6 @@ class Change_name_form(StatesGroup):
 
 class Add_product_form(StatesGroup):
     waiting_for_url = State()
+
+class Product_review_form(StatesGroup):
+    product_review = State() 

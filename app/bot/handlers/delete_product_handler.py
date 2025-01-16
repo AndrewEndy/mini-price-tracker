@@ -23,7 +23,7 @@ async def update_product_data(data: CallbackQuery):
     
     async with ChatActionSender.typing(bot=bot, chat_id=data.from_user.id):
         
-        asyncio.sleep(1)
+        await asyncio.sleep(1)
         
         await data.answer()
         await data.message.delete()
