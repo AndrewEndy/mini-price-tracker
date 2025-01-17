@@ -11,6 +11,7 @@ from app.checks.check_staff import is_url_for_product_staff, is_url_for_staff
 from app.checks.check_shchodnya import is_url_for_product_shchodnya, is_url_for_shchodnya
 from app.checks.check_eva import is_url_for_product_eva, is_url_for_eva
 from app.checks.check_focstrot import is_url_for_product_focstrot, is_url_for_focstrot
+from app.checks.check_moyo import is_url_for_product_moyo, is_url_for_moyo
 
 
 
@@ -79,6 +80,11 @@ async def check_desired_site(url: str, store_name: str) -> bool:
     if store_name == 'focstrot':
         if not is_url_for_focstrot(url): return False
         flag = await is_url_for_product_focstrot(url) 
+        
+    
+    if store_name == 'moyo':
+        if not is_url_for_moyo(url): return False
+        flag = await is_url_for_product_moyo(url) 
     
     
     return flag
