@@ -13,6 +13,7 @@ from app.parser.focstrot_parser import get_parse_focstrot, get_parsed_changes_fo
 from app.parser.moyo_parser import get_parse_moyo, get_parsed_changes_moyo
 from app.parser.allo_parser import get_parse_allo, get_parsed_changes_allo
 from app.parser.kasta_parser import get_parse_kasta, get_parsed_changes_kasta
+from app.parser.prom_parser import get_parse_prom, get_parsed_changes_prom
 from app.models import Price, Product, User
 from app.utils.work_with_database import add_new_product_to_db, get_all_products, delete_product_by_id, get_all_urls
 from app.utils.work_with_aiohttp import get_gather
@@ -36,6 +37,7 @@ async def add_new_product(url: str, store_name: str, tg_id: int) -> Tuple['int',
     if store_name == 'moyo': product, price = await get_parse_moyo(url, tg_id)
     if store_name == 'allo': product, price = await get_parse_allo(url, tg_id)
     if store_name == 'kasta': product, price = await get_parse_kasta(url, tg_id)
+    if store_name == 'prom': product, price = await get_parse_prom(url, tg_id)
     
     # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
     if price.price == 0.0 and price.discount == False and price.currency == None and price.unit_of_measure == None: return 0, ''
@@ -65,6 +67,7 @@ async def get_updated_product_data(data_for_parsing : dict) -> Tuple['Product','
         if store == 'MOYO': res = await get_parse_moyo(url, tg_id)
         if store == 'Алло': res = await get_parse_allo(url, tg_id)
         if store == 'Kasta': res = await get_parse_kasta(url, tg_id)
+        if store == 'Prom': res = await get_parse_prom(url, tg_id)
             
     return res    
 
@@ -88,6 +91,7 @@ async def get_update_product_data_with_content(data_for_parsing: dict) -> Tuple[
         if store == 'MOYO': res = await get_parsed_changes_moyo(html_content, url, tg_id)
         if store == 'Алло': res = await get_parsed_changes_allo(html_content, url, tg_id)
         if store == 'Kasta': res = await get_parsed_changes_kasta(html_content, url, tg_id)
+        if store == 'Prom': res = await get_parsed_changes_prom(html_content, url, tg_id)
             
     return res   
     
