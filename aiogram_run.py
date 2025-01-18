@@ -82,8 +82,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print(f'\033[32mБот завершив роботу\033[0m')
-
-
-
-
-# TODO: пофіксити загальну зміну, всьо ше раз перевірити, Закомітити
