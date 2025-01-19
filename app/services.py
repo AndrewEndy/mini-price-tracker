@@ -15,6 +15,7 @@ from app.parser.allo_parser import get_parse_allo, get_parsed_changes_allo
 from app.parser.kasta_parser import get_parse_kasta, get_parsed_changes_kasta
 from app.parser.prom_parser import get_parse_prom, get_parsed_changes_prom
 from app.parser.shafa_parser import get_parse_shafa, get_parsed_changes_shafa
+from app.parser.jusk_parser import get_parse_jusk, get_parsed_changes_jusk
 from app.models import Price, Product, User
 from app.utils.work_with_database import add_new_product_to_db, get_all_products, delete_product_by_id, get_all_urls
 from app.utils.work_with_aiohttp import get_gather
@@ -40,6 +41,7 @@ async def add_new_product(url: str, store_name: str, tg_id: int) -> Tuple['int',
     if store_name == 'kasta': product, price = await get_parse_kasta(url, tg_id)
     if store_name == 'shafa': product, price = await get_parse_shafa(url, tg_id)
     if store_name == 'prom': product, price = await get_parse_prom(url, tg_id)
+    if store_name == 'jusk': product, price = await get_parse_jusk(url, tg_id)
     
     # Якщо не можемо отримати всі дані | Наприклад коли в Епіцентрі товар закнчився, зникаються майже всі дані про нььго
     if price.price == 0.0 and price.discount == False and price.currency == None and price.unit_of_measure == None: return 0, ''
@@ -71,6 +73,7 @@ async def get_updated_product_data(data_for_parsing : dict) -> Tuple['Product','
         if store == 'Kasta': res = await get_parse_kasta(url, tg_id)
         if store == 'Prom': res = await get_parse_prom(url, tg_id)
         if store == 'Shafa': res = await get_parse_shafa(url, tg_id)
+        if store == 'Jusk': res = await get_parse_jusk(url, tg_id)
             
     return res    
 
@@ -96,6 +99,7 @@ async def get_update_product_data_with_content(data_for_parsing: dict) -> Tuple[
         if store == 'Kasta': res = await get_parsed_changes_kasta(html_content, url, tg_id)
         if store == 'Prom': res = await get_parsed_changes_prom(html_content, url, tg_id)
         if store == 'Shafa': res = await get_parsed_changes_shafa(html_content, url, tg_id)
+        if store == 'Jusk': res = await get_parsed_changes_jusk(html_content, url, tg_id)
             
     return res   
     
