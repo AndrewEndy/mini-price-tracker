@@ -10,7 +10,12 @@ def inline_kb_store() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text='Rozetka', callback_data='store_rozetka'), InlineKeyboardButton(text='Сільпо', callback_data='store_silpo')],
         [InlineKeyboardButton(text='Willmax', callback_data='store_willmax'), InlineKeyboardButton(text='Аврора', callback_data='store_avrora')],
         [InlineKeyboardButton(text='Епіцентр', callback_data='store_epicentr'), InlineKeyboardButton(text='Ябко', callback_data='store_yabko')],
-        [InlineKeyboardButton(text='Staff', callback_data='store_staff') ],
+        [InlineKeyboardButton(text='Staff', callback_data='store_staff'), InlineKeyboardButton(text='Щодня', callback_data='store_shchodnya')],
+        [InlineKeyboardButton(text='Eva', callback_data='store_eva'), InlineKeyboardButton(text='Фокстрот', callback_data='store_focstrot')],
+        [InlineKeyboardButton(text='MOYO', callback_data='store_moyo'), InlineKeyboardButton(text='Алло', callback_data='store_allo')],
+        [InlineKeyboardButton(text='Kasta', callback_data='store_kasta'), InlineKeyboardButton(text='Prom', callback_data='store_prom')],
+        [InlineKeyboardButton(text='Shafa', callback_data='store_shafa'), InlineKeyboardButton(text='Jusk', callback_data='store_jusk')],
+        [InlineKeyboardButton(text='Sinsay', callback_data='store_sinsay') ],
         [InlineKeyboardButton(text='«Назад', callback_data='back_home')]
     ]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
