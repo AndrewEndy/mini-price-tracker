@@ -15,6 +15,7 @@ def inline_kb_store() -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text='MOYO', callback_data='store_moyo'), InlineKeyboardButton(text='Алло', callback_data='store_allo')],
         [InlineKeyboardButton(text='Kasta', callback_data='store_kasta'), InlineKeyboardButton(text='Prom', callback_data='store_prom')],
         [InlineKeyboardButton(text='Shafa', callback_data='store_shafa'), InlineKeyboardButton(text='Jusk', callback_data='store_jusk')],
+        [InlineKeyboardButton(text='Sinsay', callback_data='store_sinsay') ],
         [InlineKeyboardButton(text='«Назад', callback_data='back_home')]
     ]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)

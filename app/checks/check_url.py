@@ -17,6 +17,7 @@ from app.checks.check_kasta import is_url_for_product_kasta, is_url_for_kasta
 from app.checks.check_prom import is_url_for_product_prom, is_url_for_prom
 from app.checks.check_shafa import is_url_for_product_shafa, is_url_for_shafa
 from app.checks.check_jusk import is_url_for_product_jusk, is_url_for_jusk
+from app.checks.check_sinsay import is_url_for_product_sinsay, is_url_for_sinsay
 
 
 
@@ -115,5 +116,10 @@ async def check_desired_site(url: str, store_name: str) -> bool:
     if store_name == 'jusk':
         if not is_url_for_jusk(url): return False
         flag = await is_url_for_product_jusk(url) 
+    
+    
+    if store_name == 'sinsay':
+        if not is_url_for_sinsay(url): return False
+        flag = await is_url_for_product_sinsay(url) 
     
     return flag
