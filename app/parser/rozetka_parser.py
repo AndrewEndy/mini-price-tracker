@@ -12,23 +12,23 @@ class RozetkaParser(BaseParser):
     async def parse(self, html_content, url: str, tg_id: int) -> Tuple['Product', 'Price'] | None:
         soup = BeautifulSoup(html_content, 'html.parser')
         
-        product_name = soup.find('h1', class_='title__font ng-star-inserted').text.strip()
+        product_name = soup.find('h1', class_='title__font').text.strip()
         
-        price_and_status_block = soup.find('div', class_='product-price__wrap ng-star-inserted')
+        price_and_status_block = soup.find('div', class_='product-price__wrap')
     
         # Пошук статуса товара
-        if price_and_status_block.find('p', class_='status-label status-label--green ng-star-inserted'):
+        if price_and_status_block.find('p', class_='status-label status-label--green'):
             status = 'Є в наявності'
-        elif price_and_status_block.find('p', class_='status-label status-label--orange ng-star-inserted'):
+        elif price_and_status_block.find('p', class_='status-label status-label--orange'):
             status = 'Закінчується'
-        elif price_and_status_block.find('p', class_='status-label status-label--gray ng-star-inserted'):
+        elif price_and_status_block.find('p', class_='status-label status-label--gray'):
             status = 'Немає в наявності'
         else:
             status = None
             
         
         # Пошук акції
-        discount = True if price_and_status_block.find('p', class_ = 'product-price__small ng-star-inserted') else False
+        discount = True if price_and_status_block.find('p', class_ = 'product-price__small') else False
         
         # Пошук тексту ціни та валюти з акцією і без
         if discount:
@@ -42,9 +42,9 @@ class RozetkaParser(BaseParser):
         
         
         # print('--->' + product_name + '<---')
-        # print('--->' + status + '<---')
+        # print('--->' + str(status) + '<---')
         # print('--->' , discount , '<---')
-        # print('--->' + currency + '<---')
+        # print('--->' + str(currency) + '<---')
         # print('--->' , price , '<---')
         
         
@@ -93,6 +93,6 @@ async def run_parsers(url: List[str]) -> None:
         
 
 if __name__ == "__main__":
-    asyncio.run(run_parsers("https://hard.rozetka.com.ua/gigabyte-gv-n4060wf2oc-8gd/p385179081/"))
+    asyncio.run(run_parsers("https://rozetka.com.ua/ua/klub-simeynogo-dozvillya-9786171283510/p440639588/"))
     # asyncio.run(run_parsers("https://123"))
     
