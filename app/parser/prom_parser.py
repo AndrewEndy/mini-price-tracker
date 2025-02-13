@@ -45,11 +45,11 @@ class PromParser(BaseParser):
                 price_with_currency = price_block.find('div', class_='bkjEo').text.strip()
 
             currency = 'грн' if price_with_currency.split()[-1] == '₴' else price_with_currency.split()[-1]
-            
+
             # Якщо перед ціною є якийсь текст, наприклад "від"
-            if not price_with_currency.split()[0].isdigit():
+            if not price_with_currency.split()[0].replace('.','', 1).isdigit():
                 price_with_currency = ' '.join(price_with_currency.split()[1:])
-             
+
             price = float(''.join(price_with_currency.split()[:-1]))
             
         # Якщо товар недоступний, дані можуть бути, а можуть і не бути
@@ -64,7 +64,7 @@ class PromParser(BaseParser):
                 currency = 'грн' if price_with_currency.split()[-1] == '₴' else price_with_currency.split()[-1] 
                 
                 # Якщо перед ціною є якийсь текст, наприклад "від"
-                if not price_with_currency.split()[0].isdigit():
+                if not price_with_currency.split()[0].replace('.','', 1).isdigit():
                     price_with_currency = ' '.join(price_with_currency.split()[1:])
                 
                 price = float(''.join(price_with_currency.split()[:-1]))
@@ -130,6 +130,6 @@ async def run_parsers(url: List[str]) -> None:
         
 
 if __name__ == "__main__":
-    asyncio.run(run_parsers("https://prom.ua/ua/p14116572-kotel-drovah-piroliznogo.html"))
+    asyncio.run(run_parsers("https://prom.ua/p2311077807-hirurg.html"))
     # asyncio.run(run_parsers("https://123"))
     
