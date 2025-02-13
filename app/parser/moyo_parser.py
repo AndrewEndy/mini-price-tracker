@@ -35,9 +35,12 @@ class MoyoParser(BaseParser):
             price_with_currency = price_block.find('div', class_='product_price_current sale js-current-price').text.strip()
         else:
             price_with_currency = price_block.find('div', class_='product_price_current js-current-price').text.strip()
-            
-        currency = price_with_currency.split()[-1]
-        price = float(''.join(price_with_currency.replace(',', '.').split()[:-1]))
+
+        currency = 'грн'
+        price = float(''.join(price_with_currency.replace(',', '.').split('грн')[0].split()))
+
+        # currency = price_with_currency.split()[-1]
+        # price = float(''.join(price_with_currency.replace(',', '.').split()[:-1]))
         
         
         
@@ -93,6 +96,6 @@ async def run_parsers(url: List[str]) -> None:
         
 
 if __name__ == "__main__":
-    asyncio.run(run_parsers("https://www.moyo.ua/ua/oral-b_zubnaya_shchetka_pro_expert_vse_v_odnom_40_srednyaya_1_1sht/524960.html"))
+    asyncio.run(run_parsers("https://www.moyo.ua/ua/smartfon_apple_iphone_16_pro_128gb_black_titanium/600476.html"))
     # asyncio.run(run_parsers("https://123"))
     
